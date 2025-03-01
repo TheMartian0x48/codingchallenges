@@ -79,7 +79,7 @@ func main() {
 		result.Word = words
 		result.Bytes = bytes
 		result.Character = bytes
-
+		result.MaxByteInLine = max(result.MaxByteInLine, maxByteInLine)
 		printResult(result)
 
 		totalResult.Bytes += result.Bytes

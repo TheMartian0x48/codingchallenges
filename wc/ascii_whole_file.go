@@ -7,11 +7,12 @@ import (
 )
 
 type CountResult struct {
-	Bytes     int
-	Character int
-	Line      int
-	Word      int
-	File      string
+	Bytes         int
+	Character     int
+	Line          int
+	MaxByteInLine int
+	Word          int
+	File          string
 }
 
 func printResult(result CountResult) {
@@ -46,9 +47,15 @@ func main() {
 		isInWord := false
 		word := 0
 		line := 0
+		var maxByteInLine int = 0
+
 		for i := 0; i < len(data); i++ {
 			if data[i] == 10 {
+				result.MaxByteInLine = max(result.MaxByteInLine, maxByteInLine)
 				line++
+				maxByteInLine = 0
+			} else {
+				maxByteInLine++
 			}
 			if isWhiteSpace(data[i]) {
 				if isInWord {
@@ -61,13 +68,14 @@ func main() {
 		}
 		result.Line = line
 		result.Word = word
-
+		result.MaxByteInLine = max(result.MaxByteInLine, maxByteInLine)
 		printResult(result)
 
 		totalResult.Bytes += result.Bytes
 		totalResult.Character += result.Character
 		totalResult.Line += result.Line
 		totalResult.Word += result.Word
+		totalResult.MaxByteInLine = max(totalResult.MaxByteInLine, result.MaxByteInLine)
 	}
 	if len(os.Args) > 2 {
 		printResult(totalResult)
